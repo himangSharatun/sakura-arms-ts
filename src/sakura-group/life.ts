@@ -1,4 +1,4 @@
-import { SakuraGroup } from "./sakuraGroup";
+import { IPetalAttributes, SakuraGroup } from "./sakuraGroup";
 
 export class Life extends SakuraGroup{
   constructor(scene: Phaser.Scene){
@@ -14,5 +14,9 @@ export class Life extends SakuraGroup{
 
   protected MaxAmount(): number {
     return 10;
+  }
+
+  protected PetalsAttribute(): IPetalAttributes[] {
+    return []
   }
 }

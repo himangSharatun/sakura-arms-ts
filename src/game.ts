@@ -1,15 +1,16 @@
-import { SakuraManager } from "./sakuraManager";
-import { Board, OpponentBoard, PlayerBoard, PlayerType } from "./board/board";
+import { Board, OpponentBoard, PlayerBoard } from "./board/board";
+import { Distance } from "./sakura-group/distance";
+import { Shadow } from "./sakura-group/shadow";
 
 export class Game extends Phaser.Scene{
   private _playerBoard: Board;
   private _opponentBoard: Board;
-  private _sakuraManager: SakuraManager;
+
+  private _distance: Distance;
+  private _shadow: Shadow;
 
   constructor() {
 		super({'key': 'game'})
-
-    this._sakuraManager = new SakuraManager(this);
   }
 
   public get PlayerBoard(): Board {
@@ -22,15 +23,16 @@ export class Game extends Phaser.Scene{
 
   preload() {
     this.load.image(Board.TextureKey(), Board.URL())
+    this.load.image('sakura-petal', 'assets/Sakura.png')
 	}
 
   create() {
     this._playerBoard = new PlayerBoard(this)
     this._opponentBoard = new OpponentBoard(this)
+    this._distance = new Distance(this)
   }
 
   update(time: number, delta: number): void {
-
   }
 }
 

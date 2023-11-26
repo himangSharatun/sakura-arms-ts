@@ -1,55 +1,43 @@
-import { Distance } from "./sakura-group/distance";
-import { Shadow } from "./sakura-group/shadow";
-import { PlayerBoard } from "./board/board";
+import { Distance } from "@/sakura-group/distance";
+import { Board } from "./board/board";
+import { Shadow } from "@/sakura-group/shadow";
 
 export class SakuraManager {
-  public Distance: Distance;
-  public Shadow: Shadow;
-
-  constructor(scene: Phaser.Scene) {
-    if (!this.Distance) {
-      this.Distance = new Distance(scene)
-    }
-    if (!this.Shadow) {
-      this.Shadow = new Shadow(scene)
-    }
-  }
-
-  public Advance(playerBoard: PlayerBoard, amount: number) {
-    if (this.Distance.Amount - amount < this.Distance.MasteryZone) {
+  public static Advance(distance: Distance, playerBoard: Board, amount: number) {
+    if (distance.Amount - amount < distance.MasteryZone) {
       throw new Error("can not advance beyond mastery zone")
     }
-    this.Distance.Move(playerBoard.Aura, amount)
+    distance.Move(playerBoard.Aura, amount)
   }
 
-  public Retreat(playerBoard: PlayerBoard, amount: number) {
-    playerBoard.Aura.Move(this.Distance, amount)
+  public Retreat(distance: Distance,playerBoard: Board, amount: number) {
+    playerBoard.Aura.Move(distance, amount)
   }
 
-  public RetreatUsingShadow() {
-    if (!this.Distance.IsInMasteryZone()) {
+  public RetreatUsingShadow(distance: Distance, shadow: Shadow) {
+    if (!distance.IsInMasteryZone()) {
       throw new Error("not in mastery zone")
     }
-    this.Shadow.Move(this.Distance, 1)
+    shadow.Move(distance, 1)
   }
 
-  public Recover(playerBoard: PlayerBoard, amount: number) {
-    this.Shadow.Move(playerBoard.Aura, amount)
+  public Recover(shadow: Shadow, playerBoard: Board, amount: number) {
+    shadow.Move(playerBoard.Aura, amount)
   }
 
-  public UseFlare(playerBoard: PlayerBoard, amount: number) {
-    playerBoard.Flare.Move(this.Shadow, amount)
+  public UseFlare(shadow: Shadow, playerBoard: Board, amount: number) {
+    playerBoard.Flare.Move(shadow, amount)
   }
 
-  public HitAura(playerBoard: PlayerBoard, amount: number) {
-    playerBoard.Aura.Move(this.Shadow, amount)
+  public HitAura(shadow: Shadow, playerBoard: Board, amount: number) {
+    playerBoard.Aura.Move(shadow, amount)
   }
 
-  public HitLife(playerBoard: PlayerBoard, amount: number) {
+  public HitLife(playerBoard: Board, amount: number) {
     playerBoard.Life.Move(playerBoard.Flare, amount)
   }
 
-  public Focus(playerBoard: PlayerBoard, amount: number) {
+  public Focus(playerBoard: Board, amount: number) {
     playerBoard.Aura.Move(playerBoard.Flare, amount)
   }
 }

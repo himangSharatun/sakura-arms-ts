@@ -1,4 +1,4 @@
-import { SakuraGroup } from "./sakuraGroup";
+import { IPetalAttributes, SakuraGroup } from "./sakuraGroup";
 
 export class Shadow extends SakuraGroup{
   constructor(scene: Phaser.Scene){
@@ -14,5 +14,9 @@ export class Shadow extends SakuraGroup{
 
   protected MaxAmount(): number {
     return Infinity;
+  }
+
+  protected PetalsAttribute(): IPetalAttributes[] {
+    return []
   }
 }

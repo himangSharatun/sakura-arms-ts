@@ -1,4 +1,4 @@
-import { Coordinates } from "@/utils/Vector2D/vector2d";
+import { Coordinates, Transformation } from "@/utils/Vector2D/vector2d";
 
 export interface ISakuraGroupConstructor {
   scene: Phaser.Scene,
@@ -6,14 +6,20 @@ export interface ISakuraGroupConstructor {
   amount: number
 }
 
-export abstract class SakuraGroup extends Phaser.GameObjects.Group{
+export interface IPetalAttributes {
+  vector2D: Coordinates;
+  transformation: Transformation
+}
+
+export abstract class SakuraGroup {
   protected amount: number;
+  protected scene: Phaser.Scene;
+  protected container: Phaser.GameObjects.Container;
 
   constructor(params: ISakuraGroupConstructor) {
-    super(
-      params.scene,
-    )
+    this.scene = params.scene
     this.amount = params.amount
+    this.container = this.scene.add.container(params.vector2d.x, params.vector2d.y, this.GenerateSakuras())
   }
 
   public get Amount(): number {
@@ -39,8 +45,20 @@ export abstract class SakuraGroup extends Phaser.GameObjects.Group{
     destination.Increase(amount)
   }
 
-  protected abstract MaxAmount(): number;
-  protected Vextor2Ds(): Coordinates[] {
-    return []
+  public static TextureKey(): string {
+    return 'sakura-petal'
   }
+
+  private GenerateSakuras(): Phaser.GameObjects.GameObject[] {
+    return this.PetalsAttribute().slice(0, this.Amount).map((attr)=>{
+      return this.scene.add.image(
+        attr.vector2D.x, attr.vector2D.y,
+        SakuraGroup.TextureKey()
+      ).setScale(attr.transformation.scale)
+      .setRotation(attr.transformation.rotation)
+    })
+  }
+
+  protected abstract MaxAmount(): number;
+  protected abstract PetalsAttribute(): IPetalAttributes[];
 }
