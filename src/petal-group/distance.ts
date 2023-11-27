@@ -1,8 +1,8 @@
 import { PetalGroup } from "./petalGroup";
-import { IPetalAttributes } from "./petal";
+import { IPetalAttributes } from "../petal/petal";
 
 
-export class Distance extends PetalGroup{
+export class Distance extends PetalGroup {
   private _masteryZone = 2;
 
   constructor(scene: Phaser.Scene){

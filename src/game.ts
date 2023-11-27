@@ -1,6 +1,6 @@
 import { Board, OpponentBoard, PlayerBoard } from "./board/board";
 import { Distance } from "./petal-group/distance";
-import { Petal, PetalType } from "./petal-group/petal";
+import { Petal, PetalType } from "./petal/petal";
 import { PetalGroup } from "./petal-group/petalGroup";
 import { Shadow } from "./petal-group/shadow";
 

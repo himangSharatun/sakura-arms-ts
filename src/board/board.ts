@@ -4,14 +4,14 @@ import { Life } from "../petal-group/life";
 import { Coordinates, Transformation } from "@/utils/Vector2D/vector2d";
 import Phaser from "phaser";
 
-export enum PlayerType {
+export enum BoardType {
   Opponent,
   Player
 }
 
 export interface IBoardConstructor {
   scene: Phaser.Scene;
-  playerType: PlayerType;
+  playerType: BoardType;
   coordinates: Coordinates;
   transformation: Transformation;
 }
@@ -21,7 +21,7 @@ export class Board extends Phaser.GameObjects.Image{
   public Aura: Aura;
   public Flare: Flare;
 
-  private _playerType: PlayerType;
+  private _boardType: BoardType;
 
   constructor(params: IBoardConstructor) {
     super(
@@ -38,7 +38,7 @@ export class Board extends Phaser.GameObjects.Image{
     this.Life = new Life(this.scene);
     this.Aura = new Aura(this.scene);
     this.Flare = new Flare(this.scene);
-    this._playerType = params.playerType
+    this._boardType = params.playerType
   }
 
   public static TextureKey(): string {
@@ -49,8 +49,8 @@ export class Board extends Phaser.GameObjects.Image{
     return 'assets/BoardJPN.png'
   }
 
-  public get PlayerType(): PlayerType {
-    return this._playerType
+  public get PlayerType(): BoardType {
+    return this._boardType
   }
 }
 
@@ -58,7 +58,7 @@ export class PlayerBoard extends Board {
   constructor(scene: Phaser.Scene) {
     super({
       scene: scene,
-      playerType: PlayerType.Player,
+      playerType: BoardType.Player,
       coordinates: {
         x: 750,
         y: 525,
@@ -75,7 +75,7 @@ export class OpponentBoard extends Board {
   constructor(scene: Phaser.Scene) {
     super({
       scene: scene,
-      playerType: PlayerType.Opponent,
+      playerType: BoardType.Opponent,
       coordinates: {
         x: 585,
         y: 195,

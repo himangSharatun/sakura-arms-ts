@@ -1,4 +1,4 @@
-import { IPetalAttributes } from "./petal";
+import { IPetalAttributes } from "../petal/petal";
 import { PetalGroup } from "./petalGroup";
 
 export class Aura extends PetalGroup{

@@ -1,5 +1,13 @@
-import { Coordinates, Transformation } from "@/utils/Vector2D/vector2d";
-import { IPetalAttributes, Petal } from "./petal";
+import { Coordinates } from "@/utils/Vector2D/vector2d";
+import { IPetalAttributes, Petal } from "../petal/petal";
+
+export enum PetalGroupType {
+  Distance,
+  Shadow,
+  Life,
+  Aura,
+  Flare,
+}
 
 export interface IPetalGroupConstructor {
   scene: Phaser.Scene;
@@ -56,7 +64,7 @@ export abstract class PetalGroup extends Phaser.GameObjects.Container{
 
   private GeneratePetals(startIndex: number, endIndex: number) {
     this.PetalsAttribute().slice(startIndex, endIndex).forEach((attr)=>{
-      let sakura = new Petal(this.scene, attr)
+      let sakura = new Petal(this, attr)
       this.add(sakura)
     })
   }
