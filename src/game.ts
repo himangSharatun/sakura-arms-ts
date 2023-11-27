@@ -33,6 +33,7 @@ export class Game extends Phaser.Scene{
   }
 
   update(time: number, delta: number): void {
+    this._distance.update()
   }
 }
 

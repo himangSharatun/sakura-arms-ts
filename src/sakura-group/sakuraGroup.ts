@@ -11,15 +11,27 @@ export interface IPetalAttributes {
   transformation: Transformation
 }
 
-export abstract class SakuraGroup {
+export abstract class SakuraGroup extends Phaser.GameObjects.Container{
   protected amount: number;
-  protected scene: Phaser.Scene;
-  protected container: Phaser.GameObjects.Container;
 
   constructor(params: ISakuraGroupConstructor) {
-    this.scene = params.scene
+    super(params.scene, params.vector2d.x, params.vector2d.y)
     this.amount = params.amount
-    this.container = this.scene.add.container(params.vector2d.x, params.vector2d.y, this.GenerateSakuras())
+    this.GenerateSakura(0, this.Amount)
+    this.scene.add.existing(this)
+  }
+
+  update(): void {
+    let sakuraCount = this.list.length
+    if (this.Amount < sakuraCount) {
+      this.DestroySakura(this.Amount)
+      return
+    }
+
+    if (this.Amount > sakuraCount) {
+      this.GenerateSakura(sakuraCount-1, this.Amount)
+      return
+    }
   }
 
   public get Amount(): number {
@@ -49,14 +61,30 @@ export abstract class SakuraGroup {
     return 'sakura-petal'
   }
 
-  private GenerateSakuras(): Phaser.GameObjects.GameObject[] {
-    return this.PetalsAttribute().slice(0, this.Amount).map((attr)=>{
-      return this.scene.add.image(
-        attr.vector2D.x, attr.vector2D.y,
-        SakuraGroup.TextureKey()
-      ).setScale(attr.transformation.scale)
-      .setRotation(attr.transformation.rotation)
+  private GenerateSakura(startIndex: number, endIndex: number) {
+    this.PetalsAttribute().slice(startIndex, endIndex).forEach((attr)=>{
+      let sakura = this.CreateSakuraImage(attr)
+      this.add(sakura)
     })
+  }
+
+  private DestroySakura(startIndex: number) {
+    this.list.forEach((sakura, index) => {
+      if (index >= startIndex) {
+        sakura.destroy()
+      }
+    })
+  }
+
+  private CreateSakuraImage(attr: IPetalAttributes): Phaser.GameObjects.Image {
+    let sakura = new Phaser.GameObjects.Image(
+      this.scene, attr.vector2D.x,
+      attr.vector2D.y,
+      SakuraGroup.TextureKey()
+    )
+    sakura.setScale(attr.transformation.scale)
+    sakura.setRotation(attr.transformation.rotation)
+    return sakura
   }
 
   protected abstract MaxAmount(): number;
