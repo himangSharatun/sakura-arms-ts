@@ -1,6 +1,6 @@
-import { Distance } from "@/sakura-group/distance";
+import { Distance } from "@/petal-group/distance";
 import { Board } from "./board/board";
-import { Shadow } from "@/sakura-group/shadow";
+import { Shadow } from "@/petal-group/shadow";
 
 export class SakuraManager {
   public static Advance(distance: Distance, playerBoard: Board, amount: number) {

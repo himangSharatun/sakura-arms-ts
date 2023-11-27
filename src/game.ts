@@ -1,6 +1,8 @@
 import { Board, OpponentBoard, PlayerBoard } from "./board/board";
-import { Distance } from "./sakura-group/distance";
-import { Shadow } from "./sakura-group/shadow";
+import { Distance } from "./petal-group/distance";
+import { Petal, PetalType } from "./petal-group/petal";
+import { PetalGroup } from "./petal-group/petalGroup";
+import { Shadow } from "./petal-group/shadow";
 
 export class Game extends Phaser.Scene{
   private _playerBoard: Board;
@@ -23,13 +25,15 @@ export class Game extends Phaser.Scene{
 
   preload() {
     this.load.image(Board.TextureKey(), Board.URL())
-    this.load.image('sakura-petal', 'assets/Sakura.png')
+    this.load.image(PetalType.Sakura, Petal.URL(PetalType.Sakura))
+    this.load.image(PetalType.Shadow, Petal.URL(PetalType.Shadow))
 	}
 
   create() {
     this._playerBoard = new PlayerBoard(this)
     this._opponentBoard = new OpponentBoard(this)
     this._distance = new Distance(this)
+    this._shadow = new Shadow(this)
   }
 
   update(time: number, delta: number): void {

@@ -1,8 +1,8 @@
-import { Coordinates, Transformation } from "@/utils/Vector2D/vector2d";
-import { IPetalAttributes, SakuraGroup } from "./sakuraGroup";
+import { PetalGroup } from "./petalGroup";
+import { IPetalAttributes } from "./petal";
 
 
-export class Distance extends SakuraGroup{
+export class Distance extends PetalGroup{
   private _masteryZone = 2;
 
   constructor(scene: Phaser.Scene){

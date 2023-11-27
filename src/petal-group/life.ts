@@ -1,6 +1,7 @@
-import { IPetalAttributes, SakuraGroup } from "./sakuraGroup";
+import { IPetalAttributes } from "./petal";
+import { PetalGroup } from "./petalGroup";
 
-export class Aura extends SakuraGroup{
+export class Life extends PetalGroup{
   constructor(scene: Phaser.Scene){
     super({
       scene: scene,
@@ -8,12 +9,12 @@ export class Aura extends SakuraGroup{
         x: 0,
         y: 0
       },
-      amount: 3
+      amount: 10
     })
   }
 
   protected MaxAmount(): number {
-    return 5;
+    return 10;
   }
 
   protected PetalsAttribute(): IPetalAttributes[] {

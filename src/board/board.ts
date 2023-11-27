@@ -1,6 +1,6 @@
-import { Aura } from "../sakura-group/aura";
-import { Flare } from "../sakura-group/flare";
-import { Life } from "../sakura-group/life";
+import { Aura } from "../petal-group/aura";
+import { Flare } from "../petal-group/flare";
+import { Life } from "../petal-group/life";
 import { Coordinates, Transformation } from "@/utils/Vector2D/vector2d";
 import Phaser from "phaser";
 
