@@ -11,7 +11,7 @@ export enum BoardType {
 
 export interface IBoardConstructor {
   scene: Phaser.Scene;
-  playerType: BoardType;
+  type: BoardType;
   coordinates: Coordinates;
   transformation: Transformation;
 }
@@ -21,7 +21,7 @@ export class Board extends Phaser.GameObjects.Image{
   public Aura: Aura;
   public Flare: Flare;
 
-  private _boardType: BoardType;
+  private _type: BoardType;
 
   constructor(params: IBoardConstructor) {
     super(
@@ -30,15 +30,15 @@ export class Board extends Phaser.GameObjects.Image{
       params.coordinates.y,
       Board.TextureKey()
     )
+    this._type = params.type
     this.rotation = params.transformation.rotation
     this.scale = params.transformation.scale
 
     this.scene.add.existing(this)
 
-    this.Life = new Life(this.scene);
+    this.Life = new Life(this.scene, this.Type);
     this.Aura = new Aura(this.scene);
     this.Flare = new Flare(this.scene);
-    this._boardType = params.playerType
   }
 
   public static TextureKey(): string {
@@ -49,8 +49,8 @@ export class Board extends Phaser.GameObjects.Image{
     return 'assets/BoardJPN.png'
   }
 
-  public get PlayerType(): BoardType {
-    return this._boardType
+  public get Type(): BoardType {
+    return this._type
   }
 }
 
@@ -58,7 +58,7 @@ export class PlayerBoard extends Board {
   constructor(scene: Phaser.Scene) {
     super({
       scene: scene,
-      playerType: BoardType.Player,
+      type: BoardType.Player,
       coordinates: {
         x: 750,
         y: 525,
@@ -75,7 +75,7 @@ export class OpponentBoard extends Board {
   constructor(scene: Phaser.Scene) {
     super({
       scene: scene,
-      playerType: BoardType.Opponent,
+      type: BoardType.Opponent,
       coordinates: {
         x: 585,
         y: 195,

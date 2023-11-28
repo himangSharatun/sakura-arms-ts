@@ -1,9 +1,9 @@
-import { Board, BoardType } from "../board/board";
+import { BoardType } from "../board/board";
 import { IPetalAttributes } from "../petal/petal";
-import { PetalGroup, PetalGroupType } from "./petalGroup";
+import { PetalGroup } from "./petalGroup";
 
 export class Life extends PetalGroup{
-  constructor(scene: Phaser.Scene){
+  constructor(scene: Phaser.Scene, boardType: BoardType){
     super({
       scene: scene,
       vector2d: {
@@ -12,6 +12,11 @@ export class Life extends PetalGroup{
       },
       amount: 10
     })
+
+    if (boardType == BoardType.Opponent) {
+      this.setPosition(425, 80)
+      this.setRotation(Math.PI)
+    }
   }
 
   protected MaxAmount(): number {
@@ -29,8 +34,8 @@ export class Life extends PetalGroup{
         transformation: { scale: 0.18, rotation: -1.31 }
       },
       {
-        vector2D: { x: -14, y: -1 },
-        transformation: { scale: 0.18, rotation: 1.15 }
+        vector2D: { x: -15, y: -1 },
+        transformation: { scale: 0.18, rotation: 1.2 }
       },
       {
         vector2D: { x: -47.5, y: 25 },
@@ -39,6 +44,26 @@ export class Life extends PetalGroup{
       {
         vector2D: { x: -21.5, y: 23 },
         transformation: { scale: 0.18, rotation: 2.4 }
+      },
+      {
+        vector2D: { x: 32, y: -32 },
+        transformation: { scale: 0.18, rotation: 0.2 }
+      },
+      {
+        vector2D: { x: 9, y: -21 },
+        transformation: { scale: 0.18, rotation: -1.1}
+      },
+      {
+        vector2D: { x: 50, y: -14 },
+        transformation: { scale: 0.18, rotation: 1.5}
+      },
+      {
+        vector2D: { x: 13, y: 5 },
+        transformation: { scale: 0.18, rotation: -2.4}
+      },
+      {
+        vector2D: { x:38, y: 9 },
+        transformation: { scale: 0.18, rotation: 2.6}
       },
     ]
   }
