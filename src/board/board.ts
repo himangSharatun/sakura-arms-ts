@@ -37,7 +37,7 @@ export class Board extends Phaser.GameObjects.Image{
     this.scene.add.existing(this)
 
     this.Life = new Life(this.scene, this.Type);
-    this.Aura = new Aura(this.scene);
+    this.Aura = new Aura(this.scene, this.Type);
     this.Flare = new Flare(this.scene);
   }
 
