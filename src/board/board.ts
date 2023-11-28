@@ -38,7 +38,7 @@ export class Board extends Phaser.GameObjects.Image{
 
     this.Life = new Life(this.scene, this.Type);
     this.Aura = new Aura(this.scene, this.Type);
-    this.Flare = new Flare(this.scene);
+    this.Flare = new Flare(this.scene, this.Type);
   }
 
   public static TextureKey(): string {

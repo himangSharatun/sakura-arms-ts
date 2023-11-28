@@ -17,10 +17,12 @@ export interface IPetalGroupConstructor {
 
 export abstract class PetalGroup extends Phaser.GameObjects.Container{
   protected amount: number;
+  protected petalsAttribute: IPetalAttributes[];
 
   constructor(params: IPetalGroupConstructor) {
     super(params.scene, params.vector2d.x, params.vector2d.y)
     this.amount = params.amount
+    this.petalsAttribute = this.PetalsAttribute()
     this.GeneratePetals(0, this.Amount)
 
     this.scene.add.existing(this)
@@ -63,7 +65,7 @@ export abstract class PetalGroup extends Phaser.GameObjects.Container{
   }
 
   private GeneratePetals(startIndex: number, endIndex: number) {
-    this.PetalsAttribute().slice(startIndex, endIndex).forEach((attr)=>{
+    this.petalsAttribute.slice(startIndex, endIndex).forEach((attr)=>{
       let sakura = new Petal(this, attr)
       this.add(sakura)
     })
