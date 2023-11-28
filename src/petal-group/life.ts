@@ -16,7 +16,9 @@ export class Life extends PetalGroup{
     if (boardType == BoardType.Opponent) {
       this.setPosition(425, 80)
       this.setRotation(Math.PI)
-    }
+    } 
+
+    this.ConfigureDropZone(150,100)
   }
 
   protected MaxAmount(): number {

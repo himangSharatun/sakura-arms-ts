@@ -1,4 +1,4 @@
-import { PetalGroup } from "@/petal-group/petalGroup";
+import { PetalGroup } from "../petal-group/petalGroup";
 import { Coordinates, Transformation } from "@/utils/Vector2D/vector2d";
 
 export enum PetalType {
@@ -13,16 +13,26 @@ export interface IPetalAttributes {
 }
 
 export class Petal extends Phaser.GameObjects.Image {
-  private _petalGroup: PetalGroup;
+  constructor(scene: Phaser.Scene, params: IPetalAttributes) {
+    super(scene, 0, 0, "")
+    this.SetAttributes(params)
+    this.ConfigureDraggable()
+  }
 
-  constructor(petalGroup: PetalGroup, params: IPetalAttributes) {
-    if (!params.type) {
-      params.type = PetalType.Sakura
+  public SetAttributes(attr: IPetalAttributes): Petal {
+    if (!attr.type) {
+      attr.type = PetalType.Sakura
     }
-    super(petalGroup.scene, params.vector2D.x, params.vector2D.y, params.type)
-    this.setScale(params.transformation.scale)
-      .setRotation(params.transformation.rotation)
-    this._petalGroup = petalGroup
+    return this.setPosition(attr.vector2D.x, attr.vector2D.y)
+      .setRotation(attr.transformation.rotation)
+      .setScale(attr.transformation.scale)
+      .setTexture(attr.type)
+  }
+
+  private ConfigureDraggable(): void {
+    this.scene.input.setDraggable(this.setInteractive())
+    this.on('drop', this.handleDrop)
+    this.on('dragend', this.handleDragEnd)
   }
 
   public static URL(type: PetalType): string {
@@ -34,7 +44,22 @@ export class Petal extends Phaser.GameObjects.Image {
     }
   }
 
-  public get PetalGroup(): PetalGroup {
-    return this._petalGroup
+  public get Group(): PetalGroup {
+    return this.parentContainer as PetalGroup
+  }
+
+  private handleDrop(pointer: Phaser.Input.Pointer, target: PetalGroup) {
+    try{
+      target.AddPetal(this)
+    } catch(err){
+      alert(err)
+    }
+  }
+
+  private handleDragEnd(pointer: Phaser.Input.Pointer, target: Phaser.GameObjects.GameObject) {
+    if (target instanceof PetalGroup) {
+      return
+    }
+    this.Group.RefreshPetalPosition()
   }
 }

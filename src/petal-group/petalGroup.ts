@@ -1,5 +1,5 @@
 import { Coordinates } from "@/utils/Vector2D/vector2d";
-import { IPetalAttributes, Petal } from "../petal/petal";
+import { IPetalAttributes, Petal, PetalType } from "../petal/petal";
 
 export enum PetalGroupType {
   Distance,
@@ -16,67 +16,59 @@ export interface IPetalGroupConstructor {
 }
 
 export abstract class PetalGroup extends Phaser.GameObjects.Container{
-  protected amount: number;
-  protected petalsAttribute: IPetalAttributes[];
+  public petalsAttribute: IPetalAttributes[];
 
   constructor(params: IPetalGroupConstructor) {
     super(params.scene, params.vector2d.x, params.vector2d.y)
-    this.amount = params.amount
     this.petalsAttribute = this.PetalsAttribute()
-    this.GeneratePetals(0, this.Amount)
+    this.GeneratePetals(0, params.amount)
 
     this.scene.add.existing(this)
   }
 
-  update(): void {
-    let sakuraCount = this.list.length
-    if (this.Amount < sakuraCount) {
-      this.DestroyPetals(this.Amount)
-      return
+  public AddPetal(petal: Petal) {
+    const sourcePetalGroup = petal.Group
+    if (this.Amount + 1 > this.MaxAmount()) {
+      sourcePetalGroup.RefreshPetalPosition()
+      throw new Error(`unable to add petal current amount: ${this.Amount} has reached max amount`)
     }
+    super.add(petal)
+    this.RefreshPetalPosition()
+    sourcePetalGroup.RefreshPetalPosition()
+  }
 
-    if (this.Amount > sakuraCount) {
-      this.GeneratePetals(sakuraCount-1, this.Amount)
-      return
-    }
+  public GetPetals(amount: number): Petal[] {
+    return this.list.slice(this.Amount-amount,this.Amount) as Petal[]
   }
 
   public get Amount(): number {
-    return this.amount
-  }
-
-  public Increase(amount: number): void {
-    if (this.Amount + amount > this.MaxAmount()) {
-      throw new Error('invalid amount: exceeding max amount')
-    }
-    this.amount += amount
-  }
-
-  public Decrease(amount: number): void {
-    if (this.Amount < amount) {
-      throw new Error('invalid amount: existing amount is less than the amount')
-    }
-    this.amount -= amount
-  }
-
-  public Move(destination: PetalGroup, amount: number): void {
-    this.Decrease(amount)
-    destination.Increase(amount)
+    return this.list.length
   }
 
   private GeneratePetals(startIndex: number, endIndex: number) {
     this.petalsAttribute.slice(startIndex, endIndex).forEach((attr)=>{
-      let sakura = new Petal(this, attr)
+      let sakura = new Petal(this.scene, attr)
       this.add(sakura)
     })
   }
 
-  private DestroyPetals(startIndex: number) {
+  public RefreshPetalPosition(): void {
     this.list.forEach((sakura, index) => {
-      if (index >= startIndex) {
-        sakura.destroy()
+      if (sakura instanceof Petal) {
+        let attr = this.petalsAttribute[index]
+        sakura.SetAttributes(attr)
       }
     })
+  }
+
+  protected ConfigureDropZone(width: number, height: number, showBox?: boolean):void {
+    this.setSize(width, height)
+    this.setInteractive({dropZone: true})
+    if (!showBox) {
+      const graphics = this.scene.add.graphics()
+      graphics.lineStyle(2, 0xffff00);
+      graphics.strokeRect(this.x - this.input?.hitArea.width / 2, this.y - this.input?.hitArea.height / 2, this.input?.hitArea.width, this.input?.hitArea.height);
+    }
   }
 
   protected abstract MaxAmount(): number;

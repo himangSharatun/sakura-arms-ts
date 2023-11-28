@@ -30,14 +30,20 @@ export class Game extends Phaser.Scene{
 	}
 
   create() {
+    this.input.on('drag', this.handleDrag)
+
     this._playerBoard = new PlayerBoard(this)
     this._opponentBoard = new OpponentBoard(this)
-    this._distance = new Distance(this)
     this._shadow = new Shadow(this)
+    this._distance = new Distance(this)
   }
 
   update(time: number, delta: number): void {
-    this._distance.update()
+  }
+
+  private handleDrag(pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Image, dragX: number, dragY: number) {
+    gameObject.x = dragX
+    gameObject.y = dragY
   }
 }
 

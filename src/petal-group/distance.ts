@@ -14,6 +14,7 @@ export class Distance extends PetalGroup {
       },
       amount: 10
     })
+    this.ConfigureDropZone(55, 465)
   }
 
   protected MaxAmount(): number {

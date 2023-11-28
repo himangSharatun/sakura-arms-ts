@@ -6,6 +6,7 @@ export class Flare extends PetalGroup{
   constructor(scene: Phaser.Scene, boardType: BoardType){
     super({
       scene: scene,
+      // TODO: Center the box with the sakura
       vector2d: {
         x: 980,
         y: 375
@@ -16,6 +17,8 @@ export class Flare extends PetalGroup{
       this.setPosition(357, 345)
       this.setRotation(Math.PI)
     }
+
+    this.ConfigureDropZone(230,200)
   }
 
   protected MaxAmount(): number {

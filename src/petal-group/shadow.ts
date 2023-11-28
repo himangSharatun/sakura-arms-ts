@@ -11,6 +11,7 @@ export class Shadow extends PetalGroup {
       },
       amount: 0,
     })
+    this.ConfigureDropZone(300, 250)
   }
 
   protected MaxAmount(): number {
