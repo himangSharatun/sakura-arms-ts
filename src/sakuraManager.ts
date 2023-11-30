@@ -1,43 +1,54 @@
 import { Distance } from "@/petal-group/distance";
 import { Board } from "./board/board";
 import { Shadow } from "@/petal-group/shadow";
+import { PetalGroup } from "./petal-group/petalGroup";
 
 export class SakuraManager {
   public static Advance(distance: Distance, playerBoard: Board, amount: number) {
     if (distance.Amount - amount < distance.MasteryZone) {
       throw new Error("can not advance beyond mastery zone")
     }
-    distance.Move(playerBoard.Aura, amount)
+    this.movePetals(distance, playerBoard.Aura, amount)
   }
 
-  public Retreat(distance: Distance,playerBoard: Board, amount: number) {
-    playerBoard.Aura.Move(distance, amount)
+  public static Retreat(distance: Distance,playerBoard: Board, amount: number) {
+    this.movePetals(playerBoard.Aura, distance, amount)
   }
 
-  public RetreatUsingShadow(distance: Distance, shadow: Shadow) {
+  public static RetreatUsingShadow(distance: Distance, shadow: Shadow) {
     if (!distance.IsInMasteryZone()) {
       throw new Error("not in mastery zone")
     }
-    shadow.Move(distance, 1)
+    this.movePetals(shadow, distance, 1)
   }
 
-  public Recover(shadow: Shadow, playerBoard: Board, amount: number) {
-    shadow.Move(playerBoard.Aura, amount)
+  public static Recover(shadow: Shadow, playerBoard: Board, amount: number) {
+    this.movePetals(shadow, playerBoard.Aura, amount)
   }
 
-  public UseFlare(shadow: Shadow, playerBoard: Board, amount: number) {
-    playerBoard.Flare.Move(shadow, amount)
+  public static UseFlare(shadow: Shadow, playerBoard: Board, amount: number) {
+    this.movePetals(playerBoard.Flare, shadow, amount)
   }
 
-  public HitAura(shadow: Shadow, playerBoard: Board, amount: number) {
-    playerBoard.Aura.Move(shadow, amount)
+  public static HitAura(shadow: Shadow, playerBoard: Board, amount: number) {
+    this.movePetals(playerBoard.Aura, shadow, amount)
   }
 
-  public HitLife(playerBoard: Board, amount: number) {
-    playerBoard.Life.Move(playerBoard.Flare, amount)
+  public static HitLife(playerBoard: Board, amount: number) {
+    this.movePetals(playerBoard.Life, playerBoard.Flare, amount)
   }
 
-  public Focus(playerBoard: Board, amount: number) {
-    playerBoard.Aura.Move(playerBoard.Flare, amount)
+  public static Focus(playerBoard: Board, amount: number) {
+    this.movePetals(playerBoard.Aura, playerBoard.Flare, amount)
+  }
+
+  private static movePetals(source: PetalGroup, target: PetalGroup, amount?: number) {
+    if (!amount) {
+      amount = 1
+    }
+    const petals = source.GetPetals(amount)
+    petals.forEach((petal) => {
+      target.AddPetal(petal)
+    })
   }
 }
