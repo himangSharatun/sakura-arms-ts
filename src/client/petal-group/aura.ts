@@ -12,13 +12,13 @@ export class Aura extends PetalGroup{
       },
       amount: 3
     })
-    
+
 
     if (boardType == BoardType.Opponent) {
       this.setPosition(510, 185)
       this.setRotation(Math.PI)
     }
-    
+
     this.ConfigureDropZone(100,100)
   }
 
