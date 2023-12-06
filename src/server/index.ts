@@ -3,6 +3,7 @@ import express from 'express'
 import cors from 'cors'
 import { Server } from 'colyseus'
 import { monitor } from '@colyseus/monitor'
+import { SakuraArms } from './sakuraArms'
 
 const port = Number(process.env.PORT || 2567)
 const app = express()
@@ -16,7 +17,7 @@ const gameServer = new Server({
 })
 
 // register your room handlers
-// gameServer.define('tic-tac-toe', TicTacToe)
+gameServer.define('sakura-arms', SakuraArms)
 
 // register colyseus monitor AFTER registering your room handlers
 app.use('/colyseus', monitor())

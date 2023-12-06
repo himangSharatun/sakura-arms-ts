@@ -1,14 +1,6 @@
 import { Coordinates } from "@/utils/Vector2D/vector2d";
 import { IPetalAttributes, Petal, PetalType } from "../petal/petal";
 
-export enum PetalGroupType {
-  Distance,
-  Shadow,
-  Life,
-  Aura,
-  Flare,
-}
-
 export interface IPetalGroupConstructor {
   scene: Phaser.Scene;
   vector2d: Coordinates;
