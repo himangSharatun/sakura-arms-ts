@@ -3,10 +3,13 @@ import { Distance } from "./petal-group/distance";
 import { Petal, PetalType } from "./petal/petal";
 import { PetalGroup } from "./petal-group/petalGroup";
 import { Shadow } from "./petal-group/shadow";
-import { PetalGroupType } from "@/types/petalGroup";
-import { PlayerType } from "@/types/players";
+import { PetalGroupType } from "../types/petalGroup";
+import { PlayerType } from "../types/players";
+import { Server } from "./services/server";
 
 export class Game extends Phaser.Scene{
+	private server: Server;
+
   private _boards: Map<PlayerType, Board>;
 
   private _distance: Distance;
@@ -14,6 +17,8 @@ export class Game extends Phaser.Scene{
 
   constructor() {
 		super({'key': 'game'})
+    this.server = new Server()
+    this._boards = new Map<PlayerType, Board>
   }
 
   public getPlayerBoard(playerType: PlayerType): Board {
@@ -26,13 +31,15 @@ export class Game extends Phaser.Scene{
     this.load.image(PetalType.Shadow, Petal.URL(PetalType.Shadow))
 	}
 
-  create() {
+  async create() {
     this.input.on('drag', this.handleDrag)
 
     this._boards.set( PlayerType.First, new PlayerBoard(this))
-    this._boards.set( PlayerType.Second, new PlayerBoard(this))
+    this._boards.set( PlayerType.Second, new OpponentBoard(this))
     this._shadow = new Shadow(this)
     this._distance = new Distance(this)
+
+    await this.server.join()
   }
 
   update(time: number, delta: number): void {

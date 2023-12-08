@@ -3,6 +3,7 @@ import { SakuraArmsState } from "./sakuraArmsState";
 import { Dispatcher } from '@colyseus/command'
 import { MessageType } from "../types/messages";
 import { GameState } from "../types/ISakuraArmsState";
+import PlayerSelectionCommand from "./commands/playerSelection";
 
 
 export class SakuraArms extends Room<SakuraArmsState> {
@@ -12,6 +13,13 @@ export class SakuraArms extends Room<SakuraArmsState> {
 	{
 		this.maxClients = 2
 		this.setState(new SakuraArmsState())
+
+    this.onMessage(MessageType.PlayerSelection, (client, message: { index: number }) => {
+			this.dispatcher.dispatch(new PlayerSelectionCommand(), {
+				client,
+				index: message.index
+			})
+		})
 	}
 
 	onJoin(client: Client)
